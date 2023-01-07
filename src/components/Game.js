@@ -6,16 +6,17 @@ function Game() {
   const [squares, setSquares] = useState(Array(9).fill(null)); // array.length 9
   const [xIsNext, setXIsNext] = useState(true);
   const [winner, setWinner] = useState(null);
-// console.log('render')
+  // console.log('render')
   //Declaring a Winner
 
   useEffect(() => {
     // console.log('run effect')
     const result = calculateWinner(squares)
-    if (result === 'O') {
-      setWinner('O')
-    } else if (result === 'X') {
-      setWinner('X')
+    // console.log(result)
+    if (result !== null) {
+      setWinner(result === "X" ? 'X' : result === 'O' ? 'O' : null)
+    } else if (!squares.includes(null) && !result) {
+      setWinner('Draw')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [squares.toString()])
@@ -50,10 +51,10 @@ function Game() {
 
   //Handle player
   const handleClick = (clickedIndex) => {
-    if (xIsNext && squares[clickedIndex] === null && winner == null) {
+    if (xIsNext && squares[clickedIndex] === null && !winner) {
       setSquares(() => squares.fill('X', clickedIndex, clickedIndex + 1))
       setXIsNext(() => false)
-    } else if (!xIsNext && squares[clickedIndex] === null && winner == null) {
+    } else if (!xIsNext && squares[clickedIndex] === null && !winner) {
       setSquares(() => squares.fill('O', clickedIndex, clickedIndex + 1))
       setXIsNext(() => true)
     }
@@ -67,9 +68,9 @@ function Game() {
   };
   return (
     <div className="main">
-      <h2 className="result">Winner is: {winner ? winner : "N/N"}</h2>
+      <h2 className="result">{winner === "X" ? `Result : X win O ` : winner === "O" ? `Result : O win X ` : winner === "Draw" ? `Result : Draw ` : `X or O ?`}</h2>
       <div className="game">
-        <span className="player">Next player is: {xIsNext ? "X" : "O"}</span>
+        <span className="player">Next player is: {xIsNext && !winner ? "X" : !xIsNext && !winner ? "O" : " "}</span>
         <Board squares={squares} handleClick={handleClick} />
         <History squares={squares} xIsNext={xIsNext} handleRestart={handleRestart} />
       </div>

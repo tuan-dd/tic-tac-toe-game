@@ -18,7 +18,7 @@ function Board({ squares, handleClick }) {
           {thirdRow.map((value, index) => (<div key={index}><Square value={value} handleClick={handleClick} index={index + 6} /></div>))}
         </div>
       </div>
-    </div>
+    </div> // ? key
   );
 }
 export default Board;
